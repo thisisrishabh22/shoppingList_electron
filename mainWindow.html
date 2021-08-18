@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+    <title>Shopping List</title>
+</head>
+<style>
+    .show {
+        margin-left: 5%;
+        margin-right: 5%;
+    }
+</style>
+
+<body>
+
+    <nav>
+        <div class="nav-wrapper">
+            <a href="#" class="brand-logo center">Shopping List</a>
+        </div>
+    </nav>
+    <h5 class="center">Enter the items</h5>
+
+    <div class="show">
+        <ul>
+
+        </ul>
+    </div>
+
+
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+    <script>
+        const electron = require('electron');
+        const { ipcRenderer } = electron;
+
+        const ul = document.querySelector('ul');
+
+        // Add items
+
+        ipcRenderer.on('item:add', function (e, item) {
+            ul.className = 'collection';
+            const li = document.createElement('li');
+            li.className = 'collection-item';
+            const itemText = document.createTextNode(item);
+            li.appendChild(itemText);
+            ul.appendChild(li);
+        });
+
+        // Remove all items
+
+        ipcRenderer.on('item:clear', function () {
+            ul.innerHTML = ' ';
+            ul.className = '';
+        });
+
+        // Remove Item
+        ul.addEventListener('dblclick', removeItem);
+        function removeItem(e) {
+            e.target.remove();
+            if (ul.children.length == 0) {
+                ul.className = '';
+            }
+        }
+    </script>
+</body>
+
+</html>
